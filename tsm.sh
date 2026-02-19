@@ -5,6 +5,9 @@
 
 set -e
 
+# Get program name from $0
+PROG_NAME=$(basename "$0")
+
 # Handle version flag and non-interactive mode
 if [[ "${1:-}" == "--version" ]] || [[ "${1:-}" == "-v" ]]; then
     echo "tmux-manager 1.0.0"
@@ -12,10 +15,10 @@ if [[ "${1:-}" == "--version" ]] || [[ "${1:-}" == "-v" ]]; then
 fi
 
 if [[ "${1:-}" == "--help" ]] || [[ "${1:-}" == "-h" ]]; then
-    cat << 'EOF'
+    cat << EOF
 Tmux Session Manager - Terminal User Interface
 
-Usage: tmux-manager [OPTIONS]
+Usage: $PROG_NAME [OPTIONS]
 
 Options:
   -v, --version    Show version information
@@ -28,7 +31,7 @@ Interactive TUI for managing tmux sessions:
   - Kill sessions
   - View random tmux tips
 
-Repository: https://github.com/ubergoonz/tmux-manager
+Repository: https://github.com/ubergoonz/tsm
 EOF
     exit 0
 fi
