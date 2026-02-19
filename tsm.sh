@@ -569,18 +569,23 @@ draw_menu_options() {
 show_menu() {
     local selected=0
     local num_options=7
+    local redraw=true
     
     while true; do
-        show_header
-        list_sessions
-        
-        # Check if there are active sessions
-        local has_sessions=0
-        if tmux list-sessions &>/dev/null; then
-            has_sessions=1
+        # Only redraw if needed
+        if [ "$redraw" = true ]; then
+            show_header
+            list_sessions
+            
+            # Check if there are active sessions
+            local has_sessions=0
+            if tmux list-sessions &>/dev/null; then
+                has_sessions=1
+            fi
+            
+            draw_menu_options $selected $has_sessions
+            redraw=false
         fi
-        
-        draw_menu_options $selected $has_sessions
         
         # Read a single character
         read -rsn1 key
@@ -594,36 +599,38 @@ show_menu() {
                     if [ $selected -lt 0 ]; then
                         selected=$((num_options - 1))
                     fi
+                    redraw=true
                     ;;
                 '[B') # Down arrow
                     ((selected++))
                     if [ $selected -ge $num_options ]; then
                         selected=0
                     fi
+                    redraw=true
                     ;;
             esac
         elif [[ $key == "" ]]; then
             # Enter key pressed
             case $selected in
-                0) create_session ; selected=0 ;;
+                0) create_session ; redraw=true ;;
                 1) 
                     if [ $has_sessions -eq 1 ]; then
-                        attach_session ; selected=0
+                        attach_session ; redraw=true
                     fi
                     ;;
                 2) 
                     if [ $has_sessions -eq 1 ]; then
-                        rename_session ; selected=0
+                        rename_session ; redraw=true
                     fi
                     ;;
                 3) 
                     if [ $has_sessions -eq 1 ]; then
-                        kill_session ; selected=0
+                        kill_session ; redraw=true
                     fi
                     ;;
                 4) 
                     if [ $has_sessions -eq 1 ]; then
-                        kill_all_sessions ; selected=0
+                        kill_all_sessions ; redraw=true
                     fi
                     ;;
                 5) return ;;
@@ -636,25 +643,25 @@ show_menu() {
             # Allow direct number selection
             selected=$((key - 1))
             case $selected in
-                0) create_session ; selected=0 ;;
+                0) create_session ; redraw=true ;;
                 1) 
                     if [ $has_sessions -eq 1 ]; then
-                        attach_session ; selected=0
+                        attach_session ; redraw=true
                     fi
                     ;;
                 2) 
                     if [ $has_sessions -eq 1 ]; then
-                        rename_session ; selected=0
+                        rename_session ; redraw=true
                     fi
                     ;;
                 3) 
                     if [ $has_sessions -eq 1 ]; then
-                        kill_session ; selected=0
+                        kill_session ; redraw=true
                     fi
                     ;;
                 4) 
                     if [ $has_sessions -eq 1 ]; then
-                        kill_all_sessions ; selected=0
+                        kill_all_sessions ; redraw=true
                     fi
                     ;;
                 5) return ;;
@@ -663,30 +670,30 @@ show_menu() {
         elif [[ $key == "c" ]] || [[ $key == "C" ]]; then
             # Create session
             create_session
-            selected=0
+            redraw=true
         elif [[ $key == "a" ]] || [[ $key == "A" ]]; then
             # Attach to session
             if [ $has_sessions -eq 1 ]; then
                 attach_session
-                selected=0
+                redraw=true
             fi
         elif [[ $key == "r" ]] || [[ $key == "R" ]]; then
             # Rename session
             if [ $has_sessions -eq 1 ]; then
                 rename_session
-                selected=0
+                redraw=true
             fi
         elif [[ $key == "k" ]] || [[ $key == "K" ]]; then
             # Kill session
             if [ $has_sessions -eq 1 ]; then
                 kill_session
-                selected=0
+                redraw=true
             fi
         elif [[ $key == "x" ]] || [[ $key == "X" ]]; then
             # Kill all sessions
             if [ $has_sessions -eq 1 ]; then
                 kill_all_sessions
-                selected=0
+                redraw=true
             fi
         elif [[ $key == "f" ]] || [[ $key == "F" ]]; then
             # Refresh
