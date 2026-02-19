@@ -83,7 +83,19 @@ check_tmux() {
 
 # List all tmux sessions
 list_sessions() {
-    echo -e "${BOLD}Current tmux sessions:${NC}"
+    # Count current sessions
+    local session_count=0
+    if tmux list-sessions &>/dev/null; then
+        session_count=$(tmux list-sessions 2>/dev/null | wc -l)
+    fi
+    
+    # Display header with session count
+    if [ $session_count -eq 0 ]; then
+        echo -e "${BOLD}Current tmux sessions:${NC}"
+    else
+        local session_label=$([ $session_count -eq 1 ] && echo "session" || echo "sessions")
+        echo -e "${BOLD}Current tmux sessions (${CYAN}$session_count${NC}${BOLD} active $session_label):${NC}"
+    fi
     echo ""
     
     if tmux list-sessions 2>/dev/null; then
