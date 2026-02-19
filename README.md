@@ -27,10 +27,13 @@ A beautiful and intuitive Terminal User Interface (TUI) for managing tmux sessio
 - **Session Management** - Create, attach, rename, and kill tmux sessions
 - **Visual Feedback** - Color-coded actions and clear status indicators
 - **Smart Defaults** - Auto-generates session names and provides helpful hints
-- **Keyboard Shortcuts** - Quick access via single-key commands (c, a, r, k, x, f, q)
+- **Keyboard Shortcuts** - Quick access via single-key commands (c, a, r, k, x, s, f, q)
+- **Session Counter** - See the number of active sessions at a glance
+- **View Sessions** - Browse and manage all sessions from a dedicated menu ([s] option)
 - **Tmux Tips** - Learn tmux while you work with random tips displayed in the interface
-- **Safety Checks** - Confirmation prompts before destructive actions
-- **Session Listing** - View all active tmux sessions at a glance
+- **Safety Checks** - Confirmation prompts before destructive actions and Ctrl+C handling
+- **Session Listing** - View all active tmux sessions with real-time counts
+- **Easy Cancellation** - Type 'q', 'cancel', or 'back' to exit any input prompt
 
 ## 🎯 How It Works
 
@@ -45,13 +48,15 @@ TSM is a bash script that provides a user-friendly wrapper around tmux commands.
 
 ### Core Functionality
 
-- **Create Session**: Prompts for session name (with smart defaults) and optional starting directory
-- **Attach to Session**: Shows a list of sessions to choose from with arrow key navigation
-- **Rename Session**: Select a session and provide a new name
+- **Create Session**: Prompts for session name (with smart defaults) and optional starting directory. Type 'q' to cancel at any point.
+- **Attach to Session**: Shows a list of sessions to choose from with arrow key navigation or direct selection
+- **Rename Session**: Select a session and provide a new name with easy cancellation
 - **Kill Session**: Safely terminate individual sessions with confirmation
-- **Kill All**: Clear all sessions (useful for cleanup)
-- **Refresh**: Reload the session list
+- **Kill All**: Clear all sessions with multiple confirmation prompts (useful for cleanup)
+- **View Sessions**: Dedicated menu to browse all sessions and perform management operations directly
+- **Refresh**: Reload the session list manually
 - **Tips System**: Displays categorized tmux tips organized by sessions, windows, panes, copy mode, config, and productivity
+- **Ctrl+C Safety**: Press Ctrl+C anywhere to get a confirmation prompt instead of immediate exit
 
 ## 📦 Installation
 
@@ -124,14 +129,34 @@ Once launched, you'll see an interactive menu with these options:
 - **[r] Rename session** - Change the name of an existing session
 - **[k] Kill session** - Terminate a specific session
 - **[x] Kill all sessions** - Terminate all active sessions (with confirmation)
+- **[s] View sessions** - Browse all sessions and manage them from a dedicated interface
 - **[f] Refresh** - Reload the session list
-- **[q] Quit** - Exit the manager
+- **[q] Quit** - Exit the manager (pressing Ctrl+C will prompt for confirmation)
 
-### Navigation
+### Session Counter
 
-- Use **↑/↓ arrow keys** to move between menu options
-- Press **Enter** to select the highlighted option
-- Or press the **letter shortcut** (c, a, r, k, x, f, q) directly
+The session list displays the number of active sessions in real-time:
+```
+Current tmux sessions (5 active sessions):
+  session1: 1 windows
+  session2: 2 windows
+  ...
+```
+
+### Easy Input Cancellation
+
+When entering session names or other input, you can quickly cancel by typing:
+- **'q'** or **'Q'** - Cancel operation
+- **'cancel'** - Cancel operation
+- **'back'** - Return to menu
+
+### Navigation & Controls
+
+- **↑/↓ Arrow keys** - Move between menu options
+- **Enter** - Select highlighted option
+- **Letter shortcuts** (c, a, r, k, x, s, f, q) - Quick access to menu items
+- **Ctrl+C** - Prompts for confirmation before quitting
+- **'q' or 'Q'** - Return to main menu from any submenu
 
 ## 🎨 Screenshots
 
